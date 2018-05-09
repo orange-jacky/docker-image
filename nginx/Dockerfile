@@ -6,11 +6,12 @@ RUN mkdir /nginx
 #
 WORKDIR /nginx
 
-#
+# add gettext-base for using envsubst command
 RUN set -x && \
 	apt-get update && \
 	apt-get install --no-install-recommends --no-install-suggests -y \
-			wget git lbzip2 build-essential libssl-dev  ca-certificates    \
+			wget git lbzip2 build-essential libssl-dev  ca-certificates   \
+			gettext-base \
 
 	&& wget http://nginx.org/download/nginx-1.12.2.tar.gz  && \
     tar xvf nginx-1.12.2.tar.gz   \
@@ -45,12 +46,12 @@ RUN set -x && \
 
 #
 EXPOSE 80 443
-
 #
 VOLUME /nginx /nginx/conf /nginx/logs /nginx/html
-
-#
-CMD ["/nginx/sbin/nginx", "-c", "/nginx/conf/nginx.conf", "-g", "daemon off;"]
+CMD for f in $(find /nginx/conf/template -regex '.*\.conf'); \
+	do envsubst '$IMAGE_DB_HOST' < $f > "/nginx/conf/vhost/$(basename $f)"; \
+	done   && \
+	/nginx/sbin/nginx -c /nginx/conf/nginx.conf -g 'daemon off;'
 
 
 
