@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:16.04 as build
 
 #
 RUN mkdir /nginx
@@ -18,11 +18,12 @@ RUN set -x && \
 	tar xvf pcre-8.38.tar.bz2   \
 
 	&& wget http://www.zlib.net/zlib-1.2.11.tar.gz && \
-	tar xvf https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz \
+	tar xvf zlib-1.2.11.tar.gz \
 
 	&& wget https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz \
-	tar xvf OpenSSL_1_1_1b.tar.gz \
+	tar xvf OpenSSL_1_1_1b.tar.gz
 
+RUN set -x \
 	&& cd .. \
 	&& cd nginx-1.19.7/ && \
 	./configure --prefix=/nginx \
@@ -31,17 +32,12 @@ RUN set -x && \
 				--with-openssl=../openssl-OpenSSL_1_1_1b \
 				--with-http_ssl_module  \
 	&& make     \
-	&& make install \
+	&& make install
 
-    && apt-get remove -y wget git  lbzip2 build-essential libssl-dev ca-certificates \
-    && cd .. \
-    && rm -rf  zlib-1.2.11*  nginx-gridfs pcre-8.38*  nginx-1.19.7* \
-    && apt-get autoremove -y \
-    && apt-get clean    \
-	&& rm -rf /var/lib/apt/lists/*
 
-#
+FROM alpine:latest
+COPY --from=build /nginx  /nginx
+WORKDIR  /nginx
 EXPOSE 80 443
-#
 VOLUME /nginx /nginx/conf /nginx/logs /nginx/html
 CMD /nginx/sbin/nginx -c /nginx/conf/nginx.conf -g 'daemon off;'
