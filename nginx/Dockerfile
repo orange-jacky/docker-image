@@ -20,7 +20,7 @@ RUN set -x && \
 	&& wget http://www.zlib.net/zlib-1.2.11.tar.gz && \
 	tar xvf zlib-1.2.11.tar.gz \
 
-	&& wget https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz \
+	&& wget https://www.openssl.org/source/OpenSSL_1_1_1b.tar.gz \
 	tar xvf OpenSSL_1_1_1b.tar.gz
 
 RUN set -x && \
