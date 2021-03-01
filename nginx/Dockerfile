@@ -23,8 +23,8 @@ RUN set -x && \
 	&& wget https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz \
 	tar xvf OpenSSL_1_1_1b.tar.gz
 
-RUN set -x \
-	&& cd .. \
+RUN set -x && \
+	cd .. \
 	&& cd nginx-1.19.7/ && \
 	./configure --prefix=/nginx \
 				--with-cc-opt="-static -static-libgcc" --with-ld-opt="-static" \
