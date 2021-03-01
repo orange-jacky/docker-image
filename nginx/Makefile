@@ -1,5 +1,5 @@
 IMAGE=$(shell basename $(shell pwd))
-TAG=1.0
+TAG=1.19.7
 REGISTRY=registry.hub.docker.com
 REGISTRY_USER=blade2iron
 
