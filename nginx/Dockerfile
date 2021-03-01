@@ -21,7 +21,7 @@ RUN set -x && \
 	tar xvf https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz \
 
 	&& wget https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz \
-	tar xvf OpenSSL_1_1_1b.tar.gz
+	tar xvf OpenSSL_1_1_1b.tar.gz \
 
 	&& cd .. \
 	&& cd nginx-1.19.7/ && \
